@@ -2702,6 +2702,20 @@ function getNumberOfDoneSQLPatches() {
 function pdfThis($html,$file_location="",$pdfname)
 {
 
+$pdf_loc = "/home/w_mgl/public_html/mgl/temp_uploads/{$pdfname}.pdf";
+$html_loc = "/home/w_mgl/public_html/mgl/temp_uploads/{$pdfname}.html";
+$fp = fopen($html_loc, 'w');
+fwrite($fp, $html);
+fclose($fp);
+shell_exec("php /home/w_mgl/bin/dompdf.php -b /var/www/html/ -p a4 -f $pdf_loc $html_loc");
+$pdf = file_get_contents($pdf_loc);
+
+header("Content-type: application/octet-stream");
+header("Content-disposition: attachment;filename={$pdfname}.pdf");
+
+echo $pdf;
+return;
+
 	global $config;
 
 //	set_include_path("../../../../library/pdf/");
